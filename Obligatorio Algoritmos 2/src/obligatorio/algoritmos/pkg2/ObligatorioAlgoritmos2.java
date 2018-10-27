@@ -2,7 +2,7 @@ package obligatorio.algoritmos.pkg2;
 
 /**
  *
- * @author Facundo
+ * @author Facundo y Enzo
  */
 public class ObligatorioAlgoritmos2 {
 
