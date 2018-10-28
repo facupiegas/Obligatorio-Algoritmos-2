@@ -1,3 +1,4 @@
+package Sistema;
 
 import Interfaces.ISistema;
 import Obligatorio.Retorno;
@@ -5,7 +6,7 @@ import Obligatorio.Sistema;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-public class pruebaCrearSistemaMonitoreo {
+public class crearSistemaMonitoreo {
 
     @Test
     public void testCrearSistemaMonitoreoConValorCero() {
