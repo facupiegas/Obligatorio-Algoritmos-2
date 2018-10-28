@@ -16,16 +16,17 @@ public class ABBAfiliado {
         return raiz;
     }
 
-    public boolean pertenece(String ci) {
+    public NodoArbolAfiliado pertenece(String ci) {
         return perteneceRec(ci, raiz);
     }
 
-    private boolean perteneceRec(String ci, NodoArbolAfiliado nodo) {
+    private NodoArbolAfiliado perteneceRec(String ci, NodoArbolAfiliado nodo) {
         if (nodo == null) {
-            return false;
+            System.out.println("la raiz e NULL");
+            return null;
         } else {
             if (ci == nodo.getCi()) {
-                return true;
+                return nodo;
             } else if (formatearCi(ci) < formatearCi(nodo.getCi())) {
                 return perteneceRec(ci, nodo.getIzq());
             } else {
@@ -51,7 +52,6 @@ public class ABBAfiliado {
 //        listarDescendenteRec(raiz);
 //        System.out.println();
 //    }
-
 //    private void listarDescendenteRec(NodoArbolAfiliado nodo) {
 //        if (nodo != null) {
 //            listarDescendenteRec(nodo.getDer());
@@ -59,7 +59,6 @@ public class ABBAfiliado {
 //            listarDescendenteRec(nodo.getIzq());
 //        }
 //    }
-
     public void insertar(String ci, String nombre, String email) {
         if (raiz == null) {
             raiz = new NodoArbolAfiliado(ci, nombre, email);
@@ -94,7 +93,6 @@ public class ABBAfiliado {
 //            return borrarMinimoRec(raiz);
 //        }
 //    }
-
 //    private int borrarMinimoRec(NodoArbolAfiliado nodo) {
 //        if (nodo.getIzq().getIzq() == null) {
 //            int ret = nodo.getIzq().getDato();
@@ -104,7 +102,6 @@ public class ABBAfiliado {
 //            return borrarMinimoRec(nodo.getIzq());
 //        }
 //    }
-
     // Pre: Pertenece(dato)
 //    public void borrar(int dato) {
 //        if (raiz.getDato() == dato) {
@@ -126,7 +123,6 @@ public class ABBAfiliado {
 //            borrarRec(dato, raiz);
 //        }
 //    }
-
 //    private void borrarRec(int dato, NodoArbolAfiliado nodo) {
 //        if (dato < nodo.getDato()) {
 //            if (nodo.getIzq().getDato() == dato) {
@@ -168,15 +164,14 @@ public class ABBAfiliado {
 //            }
 //        }
 //    }
-
     private int formatearCi(String ci) {
         int ret;
         String[] strings = ci.split(".");
         String[] strings2 = strings[2].split("-");
-        
-        return Integer.parseInt(strings[0]+strings[1]+strings2[0]+strings2[1]);
+
+        return Integer.parseInt(strings[0] + strings[1] + strings2[0] + strings2[1]);
     }
-    
+
     public void destruir() {
         raiz = null;
     }

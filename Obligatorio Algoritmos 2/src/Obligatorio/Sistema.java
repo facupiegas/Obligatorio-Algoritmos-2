@@ -5,6 +5,7 @@ import Modelo.ABBAfiliado;
 import Modelo.Grafo;
 import Modelo.NodoServidor;
 import Obligatorio.Retorno.Resultado;
+import Utils.Validators;
 
 public class Sistema implements ISistema {
 
@@ -33,7 +34,7 @@ public class Sistema implements ISistema {
         afiliados.destruir();
         afiliados = null;
         red.destruir();
-        red = null;        
+        red = null;
         return new Retorno(Resultado.OK);
     }
 
@@ -41,9 +42,24 @@ public class Sistema implements ISistema {
     //POS:
     @Override
     public Retorno registrarAfiliado(String cedula, String nombre, String email) {
-       
+        Validators val = new Validators();
+
+        if (!val.validateCi(cedula)) {
+            return new Retorno(Resultado.ERROR_1);
+        }
+
+        if (!val.validateEmail(email)) {
+            return new Retorno(Resultado.ERROR_2);
+        }
+
+        if (afiliados.pertenece(cedula) != null) {
+            return new Retorno(Resultado.ERROR_3);
+        }
         
-        return new Retorno(Resultado.NO_IMPLEMENTADA);
+        //Si paso todas las validaciones, lo agrego porque tengo la certeza de que esta todo OK
+        afiliados.insertar(cedula, nombre, email);
+
+        return new Retorno(Resultado.OK);
     }
 
     //PRE: 
@@ -107,5 +123,4 @@ public class Sistema implements ISistema {
     public Retorno dibujarMapa() {
         return new Retorno(Resultado.NO_IMPLEMENTADA);
     }
-
 }

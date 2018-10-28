@@ -1,4 +1,4 @@
-package Sistema;
+package Operaciones_Globales;
 
 import Interfaces.ISistema;
 import Obligatorio.Retorno;
@@ -6,7 +6,7 @@ import Obligatorio.Sistema;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-public class crearSistemaMonitoreo {
+public class CrearSistemaMonitoreo1_1 {
 
     @Test
     public void testCrearSistemaMonitoreoConValorCero() {
