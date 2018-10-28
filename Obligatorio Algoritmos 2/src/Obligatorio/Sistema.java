@@ -3,6 +3,7 @@ package Obligatorio;
 import Interfaces.ISistema;
 import Modelo.ABBAfiliado;
 import Modelo.Grafo;
+import Modelo.NodoArbolAfiliado;
 import Modelo.NodoServidor;
 import Obligatorio.Retorno.Resultado;
 import Utils.Validators;
@@ -11,6 +12,7 @@ public class Sistema implements ISistema {
 
     private ABBAfiliado afiliados;
     private Grafo red;
+    private Validators val;
 
     //PRE: N/A
     //POS: El sistema es inicializado
@@ -24,6 +26,7 @@ public class Sistema implements ISistema {
         NodoServidor servidor = new NodoServidor(coordX, coordY);
         red.agregarVertice(servidor);
         afiliados = new ABBAfiliado();
+        val = new Validators();
         return new Retorno(Resultado.OK);
     }
 
@@ -42,8 +45,7 @@ public class Sistema implements ISistema {
     //POS:
     @Override
     public Retorno registrarAfiliado(String cedula, String nombre, String email) {
-        Validators val = new Validators();
-
+        Retorno ret = new Retorno();
         if (!val.validateCi(cedula)) {
             return new Retorno(Resultado.ERROR_1);
         }
@@ -52,10 +54,10 @@ public class Sistema implements ISistema {
             return new Retorno(Resultado.ERROR_2);
         }
 
-        if (afiliados.pertenece(cedula) != null) {
+        if (afiliados.pertenece(cedula,ret) != null) {
             return new Retorno(Resultado.ERROR_3);
         }
-        
+
         //Si paso todas las validaciones, lo agrego porque tengo la certeza de que esta todo OK
         afiliados.insertar(cedula, nombre, email);
 
@@ -65,8 +67,24 @@ public class Sistema implements ISistema {
     //PRE: 
     //POS:
     @Override
-    public Retorno buscarAfiliado(String CI) {
-        return new Retorno(Resultado.NO_IMPLEMENTADA);
+    public Retorno buscarAfiliado(String ci) {
+        Retorno ret = new Retorno();
+        if (!val.validateCi(ci)) {
+            ret.resultado = Resultado.ERROR_1;
+            return ret;
+        }
+
+        NodoArbolAfiliado afiliado = afiliados.pertenece(ci, ret);
+
+        if (afiliado == null) {
+            ret.resultado = Resultado.ERROR_2;
+            return ret;
+        } else {
+            ret.valorString = afiliado.toString();
+            ret.resultado = Resultado.OK;
+            return ret;
+        }
+
     }
 
     @Override

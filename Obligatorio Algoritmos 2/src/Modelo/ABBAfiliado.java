@@ -1,5 +1,7 @@
 package Modelo;
 
+import Obligatorio.Retorno;
+
 public class ABBAfiliado {
 
     private NodoArbolAfiliado raiz;
@@ -16,21 +18,21 @@ public class ABBAfiliado {
         return raiz;
     }
 
-    public NodoArbolAfiliado pertenece(String ci) {
-        return perteneceRec(ci, raiz);
+    public NodoArbolAfiliado pertenece(String ci, Retorno ret) {
+        return perteneceRec(ci, raiz, ret);
     }
 
-    private NodoArbolAfiliado perteneceRec(String ci, NodoArbolAfiliado nodo) {
+    private NodoArbolAfiliado perteneceRec(String ci, NodoArbolAfiliado nodo, Retorno ret) {
+        ret.valorEntero += 1;
         if (nodo == null) {
-            System.out.println("la raiz e NULL");
             return null;
         } else {
             if (ci == nodo.getCi()) {
                 return nodo;
             } else if (formatearCi(ci) < formatearCi(nodo.getCi())) {
-                return perteneceRec(ci, nodo.getIzq());
+                return perteneceRec(ci, nodo.getIzq(), ret);
             } else {
-                return perteneceRec(ci, nodo.getDer());
+                return perteneceRec(ci, nodo.getDer(), ret);
             }
         }
     }
@@ -48,17 +50,6 @@ public class ABBAfiliado {
         }
     }
 
-//    public void listarDescendente() {
-//        listarDescendenteRec(raiz);
-//        System.out.println();
-//    }
-//    private void listarDescendenteRec(NodoArbolAfiliado nodo) {
-//        if (nodo != null) {
-//            listarDescendenteRec(nodo.getDer());
-//            System.out.println(nodo.getDato());
-//            listarDescendenteRec(nodo.getIzq());
-//        }
-//    }
     public void insertar(String ci, String nombre, String email) {
         if (raiz == null) {
             raiz = new NodoArbolAfiliado(ci, nombre, email);
@@ -83,7 +74,30 @@ public class ABBAfiliado {
         }
     }
 
-    // Pre: !EsVacio()
+    private int formatearCi(String ci) {
+//        System.out.println(ci.contains("."));
+//        System.out.println(ci.contains("-"));
+//        System.out.println(ci.split(".")[0]);
+//        String[] strings = ci.split(".");
+//        String[] strings2 = strings[2].split('-');
+//        return Integer.parseInt(strings[0] + strings[1] + strings2[0] + strings2[1]);
+        String ret = "";
+        for (int i = 0; i < ci.length(); i++) {
+            if (ci.charAt(i) != '.' && ci.charAt(i) != '-') {
+                ret += ci.charAt(i);
+            }
+        }
+        return Integer.parseInt(ret);
+
+    }
+
+    public void destruir() {
+        raiz = null;
+    }
+}
+
+//<editor-fold defaultstate="collapsed" desc="Metodos comentados">
+// Pre: !EsVacio()
 //    public int borrarMinimo() {
 //        if (raiz.getIzq() == null) {
 //            int ret = raiz.getDato();
@@ -102,7 +116,7 @@ public class ABBAfiliado {
 //            return borrarMinimoRec(nodo.getIzq());
 //        }
 //    }
-    // Pre: Pertenece(dato)
+// Pre: Pertenece(dato)
 //    public void borrar(int dato) {
 //        if (raiz.getDato() == dato) {
 //            if (raiz.getIzq() == null && raiz.getDer() == null) { // Caso 1: F�cil
@@ -164,15 +178,16 @@ public class ABBAfiliado {
 //            }
 //        }
 //    }
-    private int formatearCi(String ci) {
-        int ret;
-        String[] strings = ci.split(".");
-        String[] strings2 = strings[2].split("-");
+//    public void listarDescendente() {
+//        listarDescendenteRec(raiz);
+//        System.out.println();
+//    }
+//    private void listarDescendenteRec(NodoArbolAfiliado nodo) {
+//        if (nodo != null) {
+//            listarDescendenteRec(nodo.getDer());
+//            System.out.println(nodo.getDato());
+//            listarDescendenteRec(nodo.getIzq());
+//        }
+//    }
 
-        return Integer.parseInt(strings[0] + strings[1] + strings2[0] + strings2[1]);
-    }
-
-    public void destruir() {
-        raiz = null;
-    }
-}
+//</editor-fold>

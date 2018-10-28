@@ -227,9 +227,9 @@ public class Grafo {
     }
 
     public void destruir() {
-        for (int i = 0; i < vertices.length; i++) {
-            vertices[i] = null;
-        }
-
+//        for (int i = 0; i < vertices.length; i++) {
+//            vertices[i] = null;
+//        }
+        vertices = null;
     }
 }
