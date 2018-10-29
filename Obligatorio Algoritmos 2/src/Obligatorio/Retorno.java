@@ -8,7 +8,7 @@ public class Retorno {
  
     public int valorEntero;
 
-    public String valorString;
+    public String valorString = "";
     
     public Resultado resultado;
     

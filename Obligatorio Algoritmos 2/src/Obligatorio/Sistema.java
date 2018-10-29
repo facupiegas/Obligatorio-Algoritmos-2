@@ -54,7 +54,7 @@ public class Sistema implements ISistema {
             return new Retorno(Resultado.ERROR_2);
         }
 
-        if (afiliados.pertenece(cedula,ret) != null) {
+        if (afiliados.pertenece(cedula, ret) != null) {
             return new Retorno(Resultado.ERROR_3);
         }
 
@@ -89,7 +89,10 @@ public class Sistema implements ISistema {
 
     @Override
     public Retorno listarAfiliados() {
-        return new Retorno(Resultado.NO_IMPLEMENTADA);
+        Retorno ret = new Retorno();
+        afiliados.listarAscendente(ret);
+        ret.resultado = Resultado.OK;
+        return ret;
     }
 
     //PRE: 

@@ -37,16 +37,15 @@ public class ABBAfiliado {
         }
     }
 
-    public void listarAscendente() {
-        listarAscendenteRec(raiz);
-        System.out.println();
+    public void listarAscendente(Retorno ret) {
+        listarAscendenteRec(raiz, ret);
     }
 
-    private void listarAscendenteRec(NodoArbolAfiliado nodo) {
+    private void listarAscendenteRec(NodoArbolAfiliado nodo, Retorno ret) {
         if (nodo != null) {
-            listarAscendenteRec(nodo.getIzq());
-//            System.out.println(nodo.getDato());
-            listarAscendenteRec(nodo.getDer());
+            listarAscendenteRec(nodo.getIzq(), ret);
+            ret.valorString += nodo.toString() + " | ";
+            listarAscendenteRec(nodo.getDer(), ret);
         }
     }
 
