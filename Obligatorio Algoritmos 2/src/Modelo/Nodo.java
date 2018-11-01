@@ -11,6 +11,11 @@ public class Nodo {
         this.coordX = coordX;
         this.coordY = coordY;
     }
+    
+    public Nodo(double coordX, double coordY) {
+        this.coordX = coordX;
+        this.coordY = coordY;
+    }
 
     public String getNodoId() {
         return nodoId;

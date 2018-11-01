@@ -146,18 +146,36 @@ public class Sistema implements ISistema {
     //POS:
     @Override
     public Retorno registrarTramo(Double coordXi, Double coordYi,
-             Double coordXf, Double coordYf,
-             int perdidaCalidad
-    ) {
+            Double coordXf, Double coordYf,
+            int perdidaCalidad) {
+        Retorno ret = new Retorno();
+
+        if (perdidaCalidad <= 0) {
+            ret.resultado = Resultado.ERROR_1;
+            return ret;
+        }
+        Nodo origen = new Nodo(coordXi, coordYi);
+        Nodo destino = new Nodo(coordXf, coordYf);
+        if (!red.existeVertice(origen) || !red.existeVertice(destino)) {
+            ret.resultado = Resultado.ERROR_2;
+            return ret;
+        }
+        if (red.existeArista(origen, destino)) {
+            ret.resultado = Resultado.ERROR_3;
+            return ret;
+        }
+        
+        red.agregarArista(origen, destino, perdidaCalidad);
+        
         return new Retorno(Resultado.NO_IMPLEMENTADA);
     }
 
-    //PRE: 
-    //POS:
+//PRE: 
+//POS:
     @Override
     public Retorno modificarTramo(Double coordXi, Double coordYi,
-             Double coordXf, Double coordYf,
-             int nuevoValorPerdidaCalidad
+            Double coordXf, Double coordYf,
+            int nuevoValorPerdidaCalidad
     ) {
         return new Retorno(Resultado.NO_IMPLEMENTADA);
     }

@@ -98,16 +98,24 @@ public class Grafo {
         matAdy[posDestino][posOrigen].setExiste(false);
     }
 
-    public void DFS() {
-        boolean[] vis = new boolean[tope];
-        int pos = posOcupada();
-        if (pos != -1) {
-            for (int i = 0; i < tope; i++) {
-                if (!vis[i] && vertices[i] != null) {
-                    DFSRec(i, vis);
+    public String DFS() {
+        String ret = "";
+        for (int i = 0; i < tope; i++) {
+            if (vertices[i] != null && vertices[i] instanceof Nodo) {
+                boolean[] vis = new boolean[tope];
+                vis[i] = true;
+                DFSRec(0, vis);
+                boolean esCritico = false;
+                 for (int j = 0; i < tope; j++) {
+                    if (vertices[j] != null && vertices[j] instanceof Nodo
+                            && !vis[j]) {
+                        esCritico = true;
+                        ret += ((Nodo)vertices[i]).getNodoId() + "|";
+                    }
                 }
             }
         }
+        return ret.substring(0, ret.length()-1);
     }
 
     private void DFSRec(int pos, boolean[] vis) {
