@@ -39,16 +39,29 @@ public class ABBAfiliado {
 
     public void listarAscendente(Retorno ret) {
         listarAscendenteRec(raiz, ret);
+        ret.valorString = ret.valorString.substring(0, ret.valorString.length()-1);
     }
 
     private void listarAscendenteRec(NodoArbolAfiliado nodo, Retorno ret) {
         if (nodo != null) {
             listarAscendenteRec(nodo.getIzq(), ret);
-            ret.valorString += nodo.toString() + " | ";
+            ret.valorString += nodo.toString() + "|";
             listarAscendenteRec(nodo.getDer(), ret);
         }
     }
-
+    
+    public static void main(String [] args)
+    {
+        String ci = "4.771.266-2";
+        
+        System.out.println(ci.contains("."));
+        System.out.println(ci.contains("-"));
+        System.out.println(ci.split("[.]")[0]);
+        String[] strings = ci.split("[.]");
+        String[] strings2 = strings[2].split("-");
+        System.out.println(Integer.parseInt(strings[0] + strings[1] + strings2[0] + strings2[1]));
+    }
+    
     public void insertar(String ci, String nombre, String email) {
         if (raiz == null) {
             raiz = new NodoArbolAfiliado(ci, nombre, email);
@@ -79,20 +92,24 @@ public class ABBAfiliado {
 //        System.out.println(ci.split(".")[0]);
 //        String[] strings = ci.split(".");
 //        String[] strings2 = strings[2].split('-');
-//        return Integer.parseInt(strings[0] + strings[1] + strings2[0] + strings2[1]);
-        String ret = "";
-        for (int i = 0; i < ci.length(); i++) {
-            if (ci.charAt(i) != '.' && ci.charAt(i) != '-') {
-                ret += ci.charAt(i);
-            }
-        }
-        return Integer.parseInt(ret);
+        String[] strings = ci.split("[.]");
+        String[] strings2 = strings[2].split("-");
+        return Integer.parseInt(strings[0] + strings[1] + strings2[0] + strings2[1]);
+//        String ret = "";
+//        for (int i = 0; i < ci.length(); i++) {
+//            if (ci.charAt(i) != '.' && ci.charAt(i) != '-') {
+//                ret += ci.charAt(i);
+//            }
+//        }
+//        return Integer.parseInt(ret);
 
     }
 
     public void destruir() {
         raiz = null;
     }
+    
+
 }
 
 //<editor-fold defaultstate="collapsed" desc="Metodos comentados">

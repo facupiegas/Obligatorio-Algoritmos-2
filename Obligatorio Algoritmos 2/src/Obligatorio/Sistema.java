@@ -4,6 +4,7 @@ import Interfaces.ISistema;
 import Modelo.ABBAfiliado;
 import Modelo.Canalera;
 import Modelo.Grafo;
+import Modelo.Nodo;
 import Modelo.NodoArbolAfiliado;
 import Modelo.NodoServidor;
 import Obligatorio.Retorno.Resultado;
@@ -125,28 +126,47 @@ public class Sistema implements ISistema {
     //POS:
     @Override
     public Retorno registrarNodo(String nodoid, Double coordX, Double coordY) {
+        Retorno ret = new Retorno();
+        if (red.esLleno()) {
+            ret.resultado = Resultado.ERROR_1;
+            return ret;
+        }
+        Nodo nod = new Nodo(nodoid, coordX, coordY);
+        if (red.existeVertice(nod)) {
+            ret.resultado = Resultado.ERROR_2;
+            return ret;
+        }
+        // si llego aca no hay error, pudo agregar sin miedo
+        red.agregarVertice(nod);
+        ret.resultado = Resultado.OK;
+        return ret;
+    }
+
+    //PRE: 
+    //POS:
+    @Override
+    public Retorno registrarTramo(Double coordXi, Double coordYi,
+             Double coordXf, Double coordYf,
+             int perdidaCalidad
+    ) {
         return new Retorno(Resultado.NO_IMPLEMENTADA);
     }
 
     //PRE: 
     //POS:
     @Override
-    public Retorno registrarTramo(Double coordXi, Double coordYi, Double coordXf, Double coordYf, int perdidaCalidad) {
+    public Retorno modificarTramo(Double coordXi, Double coordYi,
+             Double coordXf, Double coordYf,
+             int nuevoValorPerdidaCalidad
+    ) {
         return new Retorno(Resultado.NO_IMPLEMENTADA);
     }
 
     //PRE: 
     //POS:
     @Override
-    public Retorno modificarTramo(Double coordXi, Double coordYi, Double coordXf, Double coordYf,
-            int nuevoValorPerdidaCalidad) {
-        return new Retorno(Resultado.NO_IMPLEMENTADA);
-    }
-
-    //PRE: 
-    //POS:
-    @Override
-    public Retorno calidadCanalera(Double coordX, Double coordY) {
+    public Retorno calidadCanalera(Double coordX, Double coordY
+    ) {
         return new Retorno(Resultado.NO_IMPLEMENTADA);
     }
 
