@@ -6,7 +6,7 @@ import Obligatorio.Sistema;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-public class CrearSistemaMonitoreo1_1 {
+public class CrearSistemaMonitoreo_1_1 {
 
     @Test
     public void testCrearSistemaMonitoreoConValorCero() {

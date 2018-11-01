@@ -6,7 +6,7 @@ import Obligatorio.Sistema;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class BuscarAfiliado2_2 {
+public class BuscarAfiliado_2_2 {
 
     @Test
     public void testBuscarAfiliadoCiNoValida() {

@@ -2,6 +2,7 @@ package Obligatorio;
 
 import Interfaces.ISistema;
 import Modelo.ABBAfiliado;
+import Modelo.Canalera;
 import Modelo.Grafo;
 import Modelo.NodoArbolAfiliado;
 import Modelo.NodoServidor;
@@ -99,7 +100,25 @@ public class Sistema implements ISistema {
     //POS:
     @Override
     public Retorno registrarCanalera(String chipid, String CIafiliado, Double coordX, Double coordY) {
-        return new Retorno(Resultado.NO_IMPLEMENTADA);
+        Retorno ret = new Retorno();
+        if (afiliados.pertenece(CIafiliado, ret) == null) {
+            ret.resultado = Resultado.ERROR_3;
+            return ret;
+        }
+        if (red.esLleno()) {
+            ret.resultado = Resultado.ERROR_1;
+            return ret;
+        }
+        Canalera can = new Canalera(chipid, CIafiliado, coordX, coordY);
+        if (red.existeVertice(can)) {
+            ret.resultado = Resultado.ERROR_2;
+            return ret;
+        }
+        // si llego aca no hay error, pudo agregar sin miedo
+        red.agregarVertice(can);
+        ret.resultado = Resultado.OK;
+        return ret;
+
     }
 
     //PRE: 
