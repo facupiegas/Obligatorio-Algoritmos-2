@@ -1,6 +1,8 @@
 package Modelo;
 
+import Interfaces.ISistema;
 import Obligatorio.Retorno;
+import Obligatorio.Sistema;
 
 public class Grafo {
 
@@ -98,11 +100,11 @@ public class Grafo {
         matAdy[posOrigen][posDestino].setExiste(false);
         matAdy[posDestino][posOrigen].setExiste(false);
     }
-    
+
     public void modificarPesoArista(Punto origen, Punto destino, int valor) {
         int posOrigen = posVertice(origen);
         int posDestino = posVertice(destino);
-        
+
         matAdy[posOrigen][posDestino].setValor(valor);
         matAdy[posDestino][posOrigen].setValor(valor);
     }
@@ -246,8 +248,42 @@ public class Grafo {
     public void destruir() {
         vertices = null;
     }
-    
+
     public Punto retornarServidorCentral() {
         return vertices[0];
+    }
+
+    public boolean esCanaleraAServidor(Double coordXi, Double coordYi, Double coordXf, Double coordYf) {
+        Punto p1 = null;
+        Punto p2 = null;
+
+        for (Punto p : vertices) {
+            if (p != null) {
+                if (p.getCoordX() == coordXi && p.getCoordY() == coordYi
+                        || p.getCoordX() == coordXf && p.getCoordY() == coordYf) {
+                    if (p1 == null) {
+                        p1 = p;
+                    } else {
+                        p2 = p;
+                    }
+                }
+            }
+        }
+        return (p1 instanceof Canalera || p1 instanceof NodoServidor)
+                && (p2 instanceof Canalera || p2 instanceof NodoServidor);
+    }
+
+    public String devolverUrl() {
+        String token = "AIzaSyCGpdxgPPMM9sWE5rZCkO4mHPvgY96QQqo";
+        String url = "http://maps.googleapis.com/maps/api/staticmap?center=Montevideo,Uruguay&zoom=13&size=1200x600&maptype=roadmap&";
+        for (Punto p : vertices) {
+            if (p != null) {
+                url += "&markers=color:" + p.getColor() + "%7Clabel:" + p.queSoy() + "%7C" + p.getCoordX() + "," + p.getCoordY();
+            }
+        }
+        System.out.println(url);
+        url += "&key=" + token;
+
+        return url;
     }
 }

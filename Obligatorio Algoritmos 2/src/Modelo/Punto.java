@@ -51,10 +51,6 @@ public class Punto {
         if (obj == null) {
             return false;
         }
-        // no funcaba  !!!!!
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
         Punto other = (Punto) obj;
         if (Double.doubleToLongBits(coordX) != Double.doubleToLongBits(other.coordX)) {
             return false;
@@ -65,4 +61,11 @@ public class Punto {
         return true;
     }
 
+    public String getColor() {
+        return "";
+    };
+    
+    public String queSoy() {
+        return "";
+    };
 }

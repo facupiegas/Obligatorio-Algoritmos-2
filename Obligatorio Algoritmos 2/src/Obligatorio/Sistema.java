@@ -10,6 +10,8 @@ import Modelo.NodoServidor;
 import Modelo.Punto;
 import Obligatorio.Retorno.Resultado;
 import Utils.Validators;
+import java.awt.Desktop;
+import java.net.URL;
 
 public class Sistema implements ISistema {
 
@@ -151,6 +153,12 @@ public class Sistema implements ISistema {
             return ret;
         }
 
+        // quiero conectar canalera con servidro central
+        if (red.esCanaleraAServidor(coordXi, coordYi, coordXf, coordYf)) {
+            ret.resultado = Resultado.ERROR_4;
+            return ret;
+        }
+
         red.agregarArista(origen, destino, perdidaCalidad);
         ret.resultado = Resultado.OK;
         return ret;
@@ -212,7 +220,17 @@ public class Sistema implements ISistema {
 
     @Override
     public Retorno dibujarMapa() {
+       
+        String url = red.devolverUrl();
+        try {
+            Desktop.getDesktop().browse(new URL(url).toURI());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        return new Retorno(Resultado.OK);
+        Retorno ret = new Retorno();
+        ret.resultado = Resultado.OK;
+        
+        return ret;
     }
 }
