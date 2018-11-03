@@ -1,22 +1,23 @@
 package Modelo;
 
+import Obligatorio.Retorno;
+
 public class Grafo {
 
-    private Object[] vertices;
+    private Punto[] vertices;
     private Arista[][] matAdy;
     private int tope;
     private int cantidad;
 
     public Grafo(int tope) {
         this.tope = tope;
-        this.vertices = new Object[tope];
+        this.vertices = new Punto[tope];
         this.matAdy = new Arista[tope][tope];
         for (int i = 0; i < tope; i++) {
             for (int j = i; j < tope; j++) {
                 matAdy[i][j] = matAdy[j][i] = new Arista();
             }
         }
-
     }
 
     private int posOcupada() {
@@ -38,7 +39,7 @@ public class Grafo {
     }
 
     // Pre: !existeVertice(ver) && !esLleno()
-    public void agregarVertice(Object ver) {
+    public void agregarVertice(Punto ver) {
         int pos = posLibre();
         vertices[pos] = ver;
         cantidad++;
@@ -46,7 +47,7 @@ public class Grafo {
 
     // Pre: existeVertice(origen) && existeVertice(destino) &&
     // !existeArista(origen, destino)
-    public void agregarArista(Object origen, Object destino, int peso) {
+    public void agregarArista(Punto origen, Punto destino, int peso) {
         int posOrigen = posVertice(origen);
         int posDestino = posVertice(destino);
 
@@ -58,7 +59,7 @@ public class Grafo {
         return cantidad == tope;
     }
 
-    private int posVertice(Object ver) {
+    private int posVertice(Punto ver) {
         for (int i = 0; i < tope; i++) {
             if (ver.equals(vertices[i])) {
                 return i;
@@ -67,11 +68,11 @@ public class Grafo {
         return -1;
     }
 
-    public boolean existeVertice(Object ver) {
+    public boolean existeVertice(Punto ver) {
         return posVertice(ver) != -1;
     }
 
-    public boolean existeArista(Object origen, Object destino) {
+    public boolean existeArista(Punto origen, Punto destino) {
         int posOrigen = posVertice(origen);
         int posDestino = posVertice(destino);
 
@@ -79,7 +80,7 @@ public class Grafo {
     }
 
     // Pre: existeVertice(ver)
-    public void borrarVertice(Object ver) {
+    public void borrarVertice(Punto ver) {
         int pos = posVertice(ver);
 
         vertices[pos] = null;
@@ -90,12 +91,20 @@ public class Grafo {
         }
     }
 
-    public void borrarArista(Object origen, Object destino) {
+    public void borrarArista(Punto origen, Punto destino) {
         int posOrigen = posVertice(origen);
         int posDestino = posVertice(destino);
 
         matAdy[posOrigen][posDestino].setExiste(false);
         matAdy[posDestino][posOrigen].setExiste(false);
+    }
+    
+    public void modificarPesoArista(Punto origen, Punto destino, int valor) {
+        int posOrigen = posVertice(origen);
+        int posDestino = posVertice(destino);
+        
+        matAdy[posOrigen][posDestino].setValor(valor);
+        matAdy[posDestino][posOrigen].setValor(valor);
     }
 
     public String DFS() {
@@ -106,21 +115,21 @@ public class Grafo {
                 vis[i] = true;
                 DFSRec(0, vis);
                 boolean esCritico = false;
-                 for (int j = 0; i < tope; j++) {
+                for (int j = 0; j < tope; j++) {
                     if (vertices[j] != null && vertices[j] instanceof Nodo
                             && !vis[j]) {
                         esCritico = true;
-                        ret += ((Nodo)vertices[i]).getNodoId() + "|";
+                        ret += ((Nodo) vertices[i]) + "|";
                     }
                 }
             }
         }
-        return ret.substring(0, ret.length()-1);
+        return ret.substring(0, ret.length() - 1);
     }
 
     private void DFSRec(int pos, boolean[] vis) {
         vis[pos] = true;
-        System.out.println(vertices[pos]);
+//        System.out.println(vertices[pos]);
         for (int i = 0; i < tope; i++) {
             if (!vis[i] && matAdy[pos][i].isExiste()) {
                 DFSRec(i, vis);
@@ -170,7 +179,7 @@ public class Grafo {
         return ret;
     }
 
-    public int dijkstra(Object origen, Object destino) {
+    public int dijkstra(Punto origen, Punto destino) {
         int posO = posVertice(origen);
         int posD = posVertice(destino);
 
@@ -205,7 +214,7 @@ public class Grafo {
         // Etapa 3: Proceso iterativo para actualizar distancias,
         //    actualizando aquellas aristas que marquen un mejor camino
         for (int k = 1; k < tope; k++) {
-            // Elijo al pr�ximo vertice, siendo �ste el de menor distancia no visitada
+            // Elijo al pr�ximo vertice, siendo este el de menor distancia no visitada
             int posCand = -1;
             int min = Integer.MAX_VALUE;
             for (int i = 0; i < tope; i++) {
@@ -235,9 +244,10 @@ public class Grafo {
     }
 
     public void destruir() {
-//        for (int i = 0; i < vertices.length; i++) {
-//            vertices[i] = null;
-//        }
         vertices = null;
+    }
+    
+    public Punto retornarServidorCentral() {
+        return vertices[0];
     }
 }

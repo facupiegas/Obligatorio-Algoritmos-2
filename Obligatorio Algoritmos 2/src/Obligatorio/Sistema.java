@@ -7,6 +7,7 @@ import Modelo.Grafo;
 import Modelo.Nodo;
 import Modelo.NodoArbolAfiliado;
 import Modelo.NodoServidor;
+import Modelo.Punto;
 import Obligatorio.Retorno.Resultado;
 import Utils.Validators;
 
@@ -16,8 +17,6 @@ public class Sistema implements ISistema {
     private Grafo red;
     private Validators val;
 
-    //PRE: N/A
-    //POS: El sistema es inicializado
     @Override
     public Retorno inicializarSistema(int maxPuntos, Double coordX, Double coordY) {
         if (maxPuntos <= 0) {
@@ -32,8 +31,6 @@ public class Sistema implements ISistema {
         return new Retorno(Resultado.OK);
     }
 
-    //PRE: Debe existir un sistema creado
-    //POS: El sistema es destruido
     @Override
     public Retorno destruirSistema() {
         afiliados.destruir();
@@ -43,8 +40,6 @@ public class Sistema implements ISistema {
         return new Retorno(Resultado.OK);
     }
 
-    //PRE: 
-    //POS:
     @Override
     public Retorno registrarAfiliado(String cedula, String nombre, String email) {
         Retorno ret = new Retorno();
@@ -66,8 +61,6 @@ public class Sistema implements ISistema {
         return new Retorno(Resultado.OK);
     }
 
-    //PRE: 
-    //POS:
     @Override
     public Retorno buscarAfiliado(String ci) {
         Retorno ret = new Retorno();
@@ -97,8 +90,6 @@ public class Sistema implements ISistema {
         return ret;
     }
 
-    //PRE: 
-    //POS:
     @Override
     public Retorno registrarCanalera(String chipid, String CIafiliado, Double coordX, Double coordY) {
         Retorno ret = new Retorno();
@@ -119,11 +110,8 @@ public class Sistema implements ISistema {
         red.agregarVertice(can);
         ret.resultado = Resultado.OK;
         return ret;
-
     }
 
-    //PRE: 
-    //POS:
     @Override
     public Retorno registrarNodo(String nodoid, Double coordX, Double coordY) {
         Retorno ret = new Retorno();
@@ -142,20 +130,18 @@ public class Sistema implements ISistema {
         return ret;
     }
 
-    //PRE: 
-    //POS:
     @Override
-    public Retorno registrarTramo(Double coordXi, Double coordYi,
-            Double coordXf, Double coordYf,
-            int perdidaCalidad) {
+    public Retorno registrarTramo(Double coordXi, Double coordYi, Double coordXf, Double coordYf, int perdidaCalidad) {
         Retorno ret = new Retorno();
 
         if (perdidaCalidad <= 0) {
             ret.resultado = Resultado.ERROR_1;
             return ret;
         }
+
         Nodo origen = new Nodo(coordXi, coordYi);
         Nodo destino = new Nodo(coordXf, coordYf);
+
         if (!red.existeVertice(origen) || !red.existeVertice(destino)) {
             ret.resultado = Resultado.ERROR_2;
             return ret;
@@ -164,41 +150,69 @@ public class Sistema implements ISistema {
             ret.resultado = Resultado.ERROR_3;
             return ret;
         }
-        
+
         red.agregarArista(origen, destino, perdidaCalidad);
-        
-        return new Retorno(Resultado.NO_IMPLEMENTADA);
+        ret.resultado = Resultado.OK;
+        return ret;
     }
 
-//PRE: 
-//POS:
     @Override
-    public Retorno modificarTramo(Double coordXi, Double coordYi,
-            Double coordXf, Double coordYf,
-            int nuevoValorPerdidaCalidad
-    ) {
-        return new Retorno(Resultado.NO_IMPLEMENTADA);
+    public Retorno modificarTramo(Double coordXi, Double coordYi, Double coordXf, Double coordYf, int nuevoValorPerdidaCalidad) {
+        Retorno ret = new Retorno();
+
+        if (nuevoValorPerdidaCalidad <= 0) {
+            ret.resultado = Resultado.ERROR_1;
+            return ret;
+        }
+
+        Nodo origen = new Nodo(coordXi, coordYi);
+        Nodo destino = new Nodo(coordXf, coordYf);
+
+        if (!red.existeArista(origen, destino)) {
+            ret.resultado = Resultado.ERROR_3;
+            return ret;
+        }
+
+        red.modificarPesoArista(origen, destino, nuevoValorPerdidaCalidad);
+        ret.resultado = Resultado.OK;
+        return ret;
     }
 
-    //PRE: 
-    //POS:
     @Override
-    public Retorno calidadCanalera(Double coordX, Double coordY
-    ) {
-        return new Retorno(Resultado.NO_IMPLEMENTADA);
+    public Retorno calidadCanalera(Double coordX, Double coordY) {
+        Retorno ret = new Retorno();
+        Nodo p = new Nodo(coordX, coordY);
+
+        if (!red.existeVertice(p)) {
+            ret.resultado = Resultado.ERROR_1;
+            return ret;
+        }
+
+        Punto servidor = red.retornarServidorCentral();
+        Nodo destino = new Nodo(coordX, coordY);
+        int distancia = red.dijkstra(servidor, destino);
+
+        if (distancia == 0) {
+            ret.resultado = Resultado.ERROR_2;
+            return ret;
+        }
+
+        ret.resultado = Resultado.OK;
+        ret.valorEntero = distancia;
+        return ret;
     }
 
-    //PRE: 
-    //POS:
     @Override
     public Retorno nodosCriticos() {
-        return new Retorno(Resultado.NO_IMPLEMENTADA);
+        Retorno ret = new Retorno();
+        ret.valorString = red.DFS();
+        ret.resultado = Resultado.OK;
+        return ret;
     }
 
-    //PRE: 
-    //POS:
     @Override
     public Retorno dibujarMapa() {
-        return new Retorno(Resultado.NO_IMPLEMENTADA);
+
+        return new Retorno(Resultado.OK);
     }
 }
